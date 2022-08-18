@@ -1,4 +1,3 @@
-// var tasks = new Array(9);
 var myTasks = [];
 
 
@@ -22,8 +21,6 @@ var createRows = function () {
             var hourHeader = $("<th>").addClass("the-hour").text(9+i + "AM");
             hourHeader.attr("id", i+9);
         }
-        
-        //<input type="text" id="lname" name="lname">
 
         var text = $("<td>").addClass("text-area");
         var textArea = $("<textarea>").addClass("form-control");
@@ -55,19 +52,12 @@ var saveTasks = function (){
 
 var loadTasks = function() {
     var localTasks = JSON.parse(localStorage.getItem("myTasks"));
-    // if nothing in localStorage, create a new object to track all task status arrays
     
     if(localTasks != null){
         myTasks = localTasks;
-        console.log("LOADING");
     } else {
         myTasks = new Array(null, Array(9));
     }
-  
-    // loop over object properties
-    // $.each(tasks, function(arr) {
-    //     console.log(arr.toDoText);
-    // });
   };
 
 var timeColor = function (){
@@ -75,7 +65,6 @@ var timeColor = function (){
         var currentHour = parseInt(moment().format('H'));
         var rowHour = parseInt(td.children[0].getAttribute('id'));
 
-        console.log(index + " : " + rowHour + " : " + currentHour);
         if(rowHour < currentHour){
             // background grey
             $("#" + index + ".hour-row").css("background-color", "#d3d3d3");
@@ -93,21 +82,13 @@ var timeColor = function (){
 $(".time-block").click( function() {
     var classClicked = event.target.getAttribute("class");
     if(classClicked.includes("saving")){
-        // var taskText = event.target.closest("tr");
         var hourID = event.target.closest("tr").id;
         var taskText = $(".hour-row#" + hourID).children()[1].firstChild.value;
-        console.log(hourID);
-        console.log(taskText);
         var newTask = {
             hour: hourID,
             toDoText: taskText
         }
         myTasks[hourID] = newTask;
-        // for(var i = 0; i < 9; i++){
-        //     if(tasks[i] != null){
-        //         console.log(i + ":- " + tasks[i].toDoText);
-        //     }
-        // }
         saveTasks();
     }
 })
