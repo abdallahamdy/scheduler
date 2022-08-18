@@ -5,12 +5,13 @@ var currentDay = moment().format("dddd" + ", " + "MMMM Do");
 
 $("#currentDay").append(currentDay);
 
+// create hour rows
 var createRows = function () {
     for(var i = 0; i < 9; i++){
         var row = $("<tr>").addClass("hour-row");
         row.attr('id', i);
         
-
+        // Populate the hour (from 9AM to 5PM)
         if(i+9 > 12){
             var hourHeader = $("<th>").addClass("the-hour").text(9+i-12 + "PM");
             hourHeader.attr("id", i+9);
@@ -22,15 +23,19 @@ var createRows = function () {
             hourHeader.attr("id", i+9);
         }
 
+        // add the textarea block
         var text = $("<td>").addClass("text-area");
         var textArea = $("<textarea>").addClass("form-control");
         textArea.attr("id", "taskText");
+
+        // if myTasks array is not empty, then lets populate text area with saved task text
         if(myTasks[i] != null){
             textArea.val(myTasks[i].toDoText);
         }
 
         text.append(textArea);
 
+        // add the save button
         var save = $("<td>").addClass("save");
         var saveBtn = $("<button>").addClass("saveBtn saving");
         var saveIcon = $("<i>").addClass("oi oi-lock-locked saving");
@@ -46,10 +51,12 @@ var createRows = function () {
     }
 }
 
+// save tasks to local storage
 var saveTasks = function (){
     localStorage.setItem("myTasks", JSON.stringify(myTasks));
 };
 
+// load tasks from local storage if the local storage array is not null
 var loadTasks = function() {
     var localTasks = JSON.parse(localStorage.getItem("myTasks"));
     
@@ -60,6 +67,7 @@ var loadTasks = function() {
     }
   };
 
+// change row color based on the current hour
 var timeColor = function (){
     $("tr.hour-row").each(function(index, td){
         var currentHour = parseInt(moment().format('H'));
@@ -79,6 +87,7 @@ var timeColor = function (){
     })
 }
 
+// listening to the save button
 $(".time-block").click( function() {
     var classClicked = event.target.getAttribute("class");
     if(classClicked.includes("saving")){
@@ -89,13 +98,17 @@ $(".time-block").click( function() {
             toDoText: taskText
         }
         myTasks[hourID] = newTask;
+        // call saveTasks to save new task entry to localstorage
         saveTasks();
     }
 })
 
+// first thing load tasks
 loadTasks();
 
+// create the hour rows
 createRows();
 
+// change the color of the rows based on the time
 timeColor();
 
